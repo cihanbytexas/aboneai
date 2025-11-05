@@ -1,4 +1,4 @@
-turtch from "node-fetch";
+import fetch from "node-fetch";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const formData = new URLSearchParams();
     formData.append("apikey", process.env.OCR_API_KEY);
     formData.append("url", image_url);
-    formData.append("language, "tur"); // İngilizce ve Türkçe destek
+    formData.append("language", "tur");  // Dil sadece Türkçe olarak değiştirildi
     formData.append("OCREngine", "2");
     formData.append("isOverlayRequired", "false");
 
@@ -24,7 +24,6 @@ export default async function handler(req, res) {
       method: "POST",
       body: formData
     });
-
     const ocrJson = await ocrRes.json();
 
     if (ocrJson.IsErroredOnProcessing) {
@@ -37,6 +36,7 @@ export default async function handler(req, res) {
 
     // Kanal adı benzerlik oranı
     const similarity = (a, b) => {
+      // Basit Levenshtein benzeri oran
       const maxLen = Math.max(a.length, b.length);
       let same = 0;
       for (let i = 0; i < Math.min(a.length, b.length); i++) {
@@ -47,7 +47,6 @@ export default async function handler(req, res) {
     const channel_ratio = similarity(channelUpper, ocrText);
     const username_match = ocrText.includes(usernameUpper);
 
-    // Abone kelimeleri kontrolü
     const sub_keywords = ["ABONE OLUNDU", "SUBSCRIBED", "ABONELİK VAR"];
     const sub_match = sub_keywords.some(k => ocrText.includes(k.toUpperCase()));
 
