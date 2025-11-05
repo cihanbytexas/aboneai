@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+turtch from "node-fetch";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const formData = new URLSearchParams();
     formData.append("apikey", process.env.OCR_API_KEY);
     formData.append("url", image_url);
-    formData.append("language", "eng,tur"); // İngilizce ve Türkçe destek
+    formData.append("language, "tur"); // İngilizce ve Türkçe destek
     formData.append("OCREngine", "2");
     formData.append("isOverlayRequired", "false");
 
